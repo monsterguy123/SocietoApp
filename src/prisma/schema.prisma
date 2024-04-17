@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+    id String @id @default(cuid())
+
+    name String 
+    img String?
+    email String @unique
+    password String 
+    society String
+    role  Role
+    Poll Poll[]
+    vote  Voted[]
+
+    createAt DateTime @default(now())
+    updateAt DateTime @updatedAt
+}
+
+model Poll{
+    id String @id @default(cuid())
+    
+    title String
+    options String[]
+    voted Voted[]
+    society String
+    AdminId String
+    User User @relation(fields: [AdminId],references: [id])
+
+    createAt DateTime @default(now())
+    updateAt DateTime @updatedAt
+}
+
+model Voted{
+  id String @id @default(cuid())
+    
+  option String  
+  vote Int @default(0)
+  PollId String 
+  poll Poll @relation(fields: [PollId], references: [id])
+  user User[]
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+enum Role{
+  member
+  secretary
+}
