@@ -79,28 +79,26 @@ export const submitPoll = async(req:Request,res:Response)=>{
        
 
        //Already submiited a pole
-       const AlreadySubmitted = await prisma.voted.findFirst({
+       const AlreadySubmitted = await prisma.user.findFirst({
             where:{
-               PollId:pollId,
-            },       
+               id:req.userId
+            },
             select:{
-               user:{
-                  where:{id:req.userId},
-                  select:{id:true}
+               vote:{
+                  where:{
+                     PollId:pollId
+                  }
                }
-            }
+            }       
         })
-         
-       if(AlreadySubmitted?.user){
-          res.json({msg:"already votted..."})
+       if(AlreadySubmitted?.vote[0]){
+          return res.json({msg:"already votted..."})
        }
 
        //vote count checking
-       console.log(pollId)
        const MatchedOption = await prisma.voted.findFirst({
           where:{option:selectedOption.option , PollId:pollId}
        })
-       console.log(MatchedOption);
        let voteCount = MatchedOption?.vote || 0;
        voteCount++;
 
@@ -111,7 +109,19 @@ export const submitPoll = async(req:Request,res:Response)=>{
          },
          where:{id:MatchedOption?.id}
        })
-       if(result){
+
+       //associating user
+       const userAssocitaion = await prisma.user.update({
+         where: { id: req.userId },
+         data: {
+             vote: {
+                 connect: {
+                     id: MatchedOption?.id
+                 }
+             }
+         }
+     });
+       if(result && userAssocitaion){
          res.json({
             msg:"voted successfully"
          })

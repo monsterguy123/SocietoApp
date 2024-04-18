@@ -11,11 +11,12 @@ export const userSignup = async(req:Request,res:Response)=>{
     try {     
         const User:UserSchema = req.body; 
         const userValidation = userSchema.safeParse(User);
+        
         if(userValidation.success === false){
             res.json({msg:"there is error in user req body plz resend the correct user details..."})
         };
         
-        const AlreadyExists = await prisma.user.findUnique({
+        const AlreadyExists = await prisma.user.findFirst({
             where:{
                 email:User.email
             },
@@ -23,7 +24,9 @@ export const userSignup = async(req:Request,res:Response)=>{
                 id:true
             }
         });
-         
+        
+        console.log(AlreadyExists)
+        
         if(AlreadyExists && AlreadyExists!=null){
               res.json({msg:"user already exists"});
         }

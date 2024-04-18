@@ -2,6 +2,7 @@ import express,{Application} from 'express'
 import {config} from 'dotenv'
 import userRouter from './Routes/User';
 import PollRouter from './Routes/Poll';
+import FeesRouter from './Routes/Fees';
 config();
 
 const app:Application = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 //routes
 app.use('/api/v1',userRouter);
 app.use('/api/v1/poll',PollRouter)
+app.use('api/v1/admin',FeesRouter)
 
 
 

@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role{
+  member
+  secretary
+}
+
 model User{
     id String @id @default(cuid())
 
@@ -18,6 +23,9 @@ model User{
     role  Role
     Poll Poll[]
     vote  Voted[]
+    FeesId String? 
+    FeesCreated Fees[] @relation("Admin")
+    Fees_Submited Fees[] @relation("Submitter")
 
     createAt DateTime @default(now())
     updateAt DateTime @updatedAt
@@ -50,7 +58,22 @@ model Voted{
   updateAt DateTime @updatedAt
 }
 
-enum Role{
-  member
-  secretary
+model Fees{
+   id String @id @default(cuid())
+
+   title String
+   amount Int
+   startDate DateTime
+   endDate DateTime
+   isSubmitted Boolean?
+   AdminId String
+   Admin User @relation("Admin",fields:[AdminId],references: [id]) 
+   
+   user_Submitter User[] @relation("Submitter")
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
 }
+
+
+
