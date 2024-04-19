@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role{
+  member
+  secretary
+}
+
+model User{
+    id String @id @default(cuid())
+
+    name String 
+    img String?
+    email String @unique
+    password String 
+    society String
+    FlatNo String
+    role  Role
+    Poll Poll[]
+    vote  Voted[]
+    complaintRequest ComplaintRequest[]
+    NoticeCreation ComplaintNotice[] @relation("Admin")
+    ComplaintNotice ComplaintNotice[] @relation("Culprit")
+    FeesId String? 
+    FeesCreated Fees[] @relation("Admin")
+    Fees_Submited userSubmitted[] @relation("Submitter")
+
+    createAt DateTime @default(now())
+    updateAt DateTime @updatedAt
+}
+
+model Poll{
+    id String @id @default(cuid())
+    
+    title String
+    options String[]
+    voted Voted[]
+    society String
+    AdminId String
+    User User @relation(fields: [AdminId],references: [id])
+
+    createAt DateTime @default(now())
+    updateAt DateTime @updatedAt
+}
+
+model Voted{
+  id String @id @default(cuid())
+    
+  option String  
+  vote Int @default(0)
+  PollId String 
+  poll Poll @relation(fields: [PollId], references: [id])
+  user User[]
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model Fees{
+   id String @id @default(cuid())
+
+   title String
+   amount Int
+   startDate DateTime
+   endDate DateTime
+   AdminId String
+   Admin User @relation("Admin",fields:[AdminId],references: [id]) 
+   user userSubmitted[]
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model userSubmitted{
+   id String @id @default(cuid())
+
+   FeeId String
+   Fee Fees @relation(fields:[FeeId],references:[id])
+   user_Submitter User[] @relation("Submitter")
+
+
+   createAt DateTime @default(now())
+   updateAt DateTime @updatedAt
+}
+
+model ComplaintRequest {
+   id String @id @default(cuid()) 
+ 
+   culpritFlatno String
+   title String
+   description String
+   impact String
+   requestedAction String
+   EvidenceImg String?
+   isResolved Boolean? @default(false)
+   userId String
+   user User @relation(fields: [userId], references: [id])
+   notice  ComplaintNotice?
+
+   
+   createAt DateTime @default(now())
+   updateAt DateTime @updatedAt
+}
+
+model ComplaintNotice {
+   id String @id @default(cuid())
+
+   title String
+   issue String
+   request String
+   action String
+   understood Boolean? @default(false)
+   AdminId String
+   Admin User @relation("Admin", fields: [AdminId], references: [id])
+   userId String
+   culprit User @relation("Culprit", fields: [userId], references: [id])
+   Complaint ComplaintRequest @relation(fields: [complaintId],references: [id])
+   complaintId String @unique
+
+   createAt DateTime @default(now())
+   updateAt DateTime @updatedAt
+}
+
+
+

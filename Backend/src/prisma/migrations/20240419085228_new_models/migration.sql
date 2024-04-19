@@ -9,8 +9,9 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "society" TEXT NOT NULL,
+    "FlatNo" TEXT NOT NULL,
     "role" "Role" NOT NULL,
-    "Fees" TEXT NOT NULL,
+    "FeesId" TEXT,
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" TIMESTAMP(3) NOT NULL,
 
@@ -49,12 +50,55 @@ CREATE TABLE "Fees" (
     "amount" INTEGER NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
     "endDate" TIMESTAMP(3) NOT NULL,
-    "isSubmitted" BOOLEAN NOT NULL,
     "AdminId" TEXT NOT NULL,
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updateAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Fees_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "userSubmitted" (
+    "id" TEXT NOT NULL,
+    "FeeId" TEXT NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "userSubmitted_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ComplaintRequest" (
+    "id" TEXT NOT NULL,
+    "culpritFlatno" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "impact" TEXT NOT NULL,
+    "requestedAction" TEXT NOT NULL,
+    "EvidenceImg" TEXT,
+    "userId" TEXT NOT NULL,
+    "isResolved" BOOLEAN DEFAULT false,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ComplaintRequest_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ComplaintNotice" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "issue" TEXT NOT NULL,
+    "impact" TEXT NOT NULL,
+    "request" TEXT NOT NULL,
+    "Action" TEXT NOT NULL,
+    "understood" BOOLEAN NOT NULL DEFAULT false,
+    "AdminId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "ComplaintNotice_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -94,13 +138,25 @@ ALTER TABLE "Voted" ADD CONSTRAINT "Voted_PollId_fkey" FOREIGN KEY ("PollId") RE
 ALTER TABLE "Fees" ADD CONSTRAINT "Fees_AdminId_fkey" FOREIGN KEY ("AdminId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "userSubmitted" ADD CONSTRAINT "userSubmitted_FeeId_fkey" FOREIGN KEY ("FeeId") REFERENCES "Fees"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ComplaintRequest" ADD CONSTRAINT "ComplaintRequest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ComplaintNotice" ADD CONSTRAINT "ComplaintNotice_AdminId_fkey" FOREIGN KEY ("AdminId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ComplaintNotice" ADD CONSTRAINT "ComplaintNotice_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "_UserToVoted" ADD CONSTRAINT "_UserToVoted_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserToVoted" ADD CONSTRAINT "_UserToVoted_B_fkey" FOREIGN KEY ("B") REFERENCES "Voted"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_Submitter" ADD CONSTRAINT "_Submitter_A_fkey" FOREIGN KEY ("A") REFERENCES "Fees"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_Submitter" ADD CONSTRAINT "_Submitter_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_Submitter" ADD CONSTRAINT "_Submitter_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_Submitter" ADD CONSTRAINT "_Submitter_B_fkey" FOREIGN KEY ("B") REFERENCES "userSubmitted"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -4,6 +4,7 @@ export const userSchema = object({
     name:zod.string().max(20),
     email:zod.string().email().includes('@'),
     password:zod.string().min(8).max(20),
+    FlatNo:zod.string(),
     society:zod.string(),
     role:zod.string().optional()
 })

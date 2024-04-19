@@ -25,8 +25,6 @@ export const userSignup = async(req:Request,res:Response)=>{
             }
         });
         
-        console.log(AlreadyExists)
-        
         if(AlreadyExists && AlreadyExists!=null){
               res.json({msg:"user already exists"});
         }
@@ -48,7 +46,8 @@ export const userSignup = async(req:Request,res:Response)=>{
                 email:User.email,
                 password:hashPassword,
                 society,
-                role
+                role,
+                FlatNo:User.FlatNo
             }
         });
 
@@ -66,6 +65,7 @@ export const userSignin = async(req:Request,res:Response)=>{
         
          const User = req.body;
          const userValidation = userSigninSchema.safeParse(User);
+
 
          if(userValidation.success === false){
               res.status(401).json({msg:"error in either email or password!!!"});

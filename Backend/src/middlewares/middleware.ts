@@ -5,7 +5,7 @@ import {Request,Response,NextFunction} from 'express'
 declare global {
     namespace Express {
       interface Request {
-        adminId?: string; 
+        adminId?: string;
         society?:string;
         userId?:string;
       }
@@ -16,8 +16,8 @@ export const userMiddleware = async (req:Request,res:Response,next:NextFunction)
     try {
         
         const token = req.header('Authorization')?.replace('Bearer ','') || "";
-        const decodedToken = JWT.verify(token, process.env.JWTPRIVATEKEY || "") as JwtPayload
- 
+        const secret = process.env.JWTPRIVATEKEY || "";
+        const decodedToken = JWT.verify(token,secret) as JwtPayload
         if(decodedToken){
             req.society = decodedToken.society;
             req.userId = decodedToken.id;

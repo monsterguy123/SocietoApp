@@ -3,17 +3,22 @@ import {config} from 'dotenv'
 import userRouter from './Routes/User';
 import PollRouter from './Routes/Poll';
 import FeesRouter from './Routes/Fees';
+import ComplaintRouter from './Routes/Complaints';
+import NoticeRouter from './Routes/Notice';
 config();
 
 const app:Application = express();
 
 //middlewares
+
 app.use(express.json());
 
 //routes
 app.use('/api/v1',userRouter);
-app.use('/api/v1/poll',PollRouter)
-app.use('api/v1/admin',FeesRouter)
+app.use('/api/v1/poll',PollRouter);
+app.use('/api/v1/fee',FeesRouter);
+app.use('/api/v1/complaint',ComplaintRouter)
+app.use('/api/v1/notice',NoticeRouter)
 
 
 
