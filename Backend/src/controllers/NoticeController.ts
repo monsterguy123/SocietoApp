@@ -5,19 +5,14 @@ const prisma = new PrismaClient();
 export const createNotice = async(req:Request,res:Response)=>{
       try {
         
-        const Notice:{title:string , issue:string , request:string , action:string } = req.body;
+        const Notice:{title:string , issue:string , request:string , action:string,culpritFlatno:string } = req.body;
         const complaintId = req.params.complaintId;
         //validation
         
-        //getting culprit's house No
-        const User =  await prisma.complaintRequest.findUnique({
-            where:{id:complaintId},
-            select:{culpritFlatno:true}
-        })
 
          //getting culprit's id
          const culprit = await prisma.user.findFirst({
-            where:{FlatNo:User?.culpritFlatno},
+            where:{FlatNo:Notice?.culpritFlatno},
             select:{id:true}
          })
 
