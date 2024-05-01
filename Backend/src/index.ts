@@ -5,12 +5,13 @@ import PollRouter from './Routes/Poll';
 import FeesRouter from './Routes/Fees';
 import ComplaintRouter from './Routes/Complaints';
 import NoticeRouter from './Routes/Notice';
+import cors from 'cors'
 config();
 
 const app:Application = express();
 
 //middlewares
-
+app.use(cors());
 app.use(express.json());
 
 //routes

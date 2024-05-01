@@ -12,55 +12,68 @@ declare global {
 
 const prisma = new PrismaClient();
 
-export const CreatePoll = async (req:Request,res:Response)=>{
-     try {
-        const Poll:{title:string , options:string[] ,society:string} = req.body;
+export const CreatePoll = async (req: Request, res: Response) => {
+   try {
+       const pollData: { title: string, options: string[] } = req.body;
 
-        //validation
+       // Validate pollData
+       // ...
 
-        
-        let society = Poll.society.replace(/\s/g,"");
-        society = society.toLowerCase();
+       // Check if there's already a poll created by the admin
+       const existingPoll = await prisma.poll.findFirst({
+           where: { AdminId: req.adminId },
+           select: { id: true }
+       });
 
-        //creating a poll
-        const result = await prisma.poll.create({
-            data:{
-               title:Poll.title,
-               options:Poll.options,
-               society:society,
-               AdminId:req.adminId||""
-            },
-            select:{
-               id:true
-            }
-        });
+       if (existingPoll) {
+           return res.json({ msg: "One poll at a time. To create another, delete the previous one." });
+       }
 
-       //creating options after poll creation in the voted db
-       const option = Poll.options.map(item =>{
-          return {option:item , PollId:result.id};
-       })
-       const createVote = await prisma.voted.createMany({
-         data:option
-       })
+       // Create a new poll
+       let society = req.society || "";
+       const createdPoll = await prisma.poll.create({
+           data: {
+               title: pollData.title,
+               options: pollData.options,
+               society: society,
+               AdminId: req.adminId || "",
+           },
+           select: { id: true }
+       });
 
-        if(result && createVote){
-            res.json({msg:"Poll has been created successfully!!!!"});
-        }
+       // Create options for the newly created poll in the voted table
+       const options = pollData.options.map(option => {
+           return { option: option, PollId: createdPoll.id };
+       });
 
-     } catch (error:any) {
-        res.json({msg:error.message});
-     }
+       const createdOptions = await prisma.voted.createMany({
+           data: options
+       });
+
+       if (createdPoll && createdOptions) {
+           return res.json({ msg: "Poll has been created successfully!" });
+       }
+   } catch (error: any) {
+       return res.json({ msg: error.message });
+   }
 }
 
-//Getting a Poll
+
+//Getting a Poll for user
 export const GetAPoll = async(req:Request,res:Response)=>{
      try {
         let society = req.society || "";
 
-        const Poll = await prisma.poll.findMany({
-          where:{society}
+       const Poll = await prisma.poll.findMany({
+          where:{society},
+          select:{
+            title:true,
+            options:true,
+            id:true
+          }
         });
-        
+
+      
         if(Poll){
           res.json({Poll})
         }
@@ -75,23 +88,21 @@ export const submitPoll = async(req:Request,res:Response)=>{
        const selectedOption:{option:string} = req.body;
        const pollId = req.params.pollId;
 
-       //validation
-       
+       //validation       
 
        //Already submiited a pole
-       const AlreadySubmitted = await prisma.user.findFirst({
+       const AlreadySubmitted = await prisma.poll.findFirst({
             where:{
-               id:req.userId
+               id:pollId
             },
             select:{
-               vote:{
-                  where:{
-                     PollId:pollId
-                  }
+               userVoted:{
+                   where:{id:req.userId},
+                   select:{id:true}                 
                }
             }       
         })
-       if(AlreadySubmitted?.vote[0]){
+       if(AlreadySubmitted?.userVoted.length !== 0){
           return res.json({msg:"already votted..."})
        }
 
@@ -109,24 +120,87 @@ export const submitPoll = async(req:Request,res:Response)=>{
          },
          where:{id:MatchedOption?.id}
        })
-
-       //associating user
-       const userAssocitaion = await prisma.user.update({
-         where: { id: req.userId },
-         data: {
-             vote: {
-                 connect: {
-                     id: MatchedOption?.id
-                 }
-             }
+       const user = await prisma.poll.update({
+         where:{
+            id:pollId,
+         },
+         data:{
+            userVoted:{
+               connect:{
+                  id:req.userId
+               }
+            }
          }
-     });
-       if(result && userAssocitaion){
+       })
+
+       if(result && user){
          res.json({
             msg:"voted successfully"
          })
        }
    } catch (error:any) {
        res.json({msg:error.message})
+   }
+}
+
+//get all polls and send the high voted:---
+export const GetPolls = async(req:Request,res:Response)=>{
+   try {
+      
+      const polls = await prisma.poll.findMany({
+          where:{AdminId:req.adminId}
+         ,select:{
+             title:true,
+             id:true,
+             voted:{
+                select:{
+                    option:true,
+                    vote:true,
+                }
+             }
+         }
+      })
+
+      let TotalNoOfPeople = await prisma.user.findMany({
+         where:{society:req.society,role:"member"},
+         select:{
+            id:true
+         }
+      })
+      let Total:number = TotalNoOfPeople.length;
+
+      if(polls){
+         res.json({polls,Total});
+      }
+
+   } catch (error:any) {
+      res.json({msg:error.message})
+   }
+}
+
+// Remove a poll from PollModel
+export const RemovePoll = async (req: Request, res: Response) => {
+   try {
+       const pollId = req.params.pollId;
+
+       // Validate pollId
+       if (!pollId) {
+           return res.status(400).json({ error: 'Invalid pollId' });
+       }
+
+       await prisma.voted.deleteMany({
+         where:{
+            PollId:pollId
+         }
+       })
+
+       await prisma.poll.delete({
+         where:{id:pollId}
+       })
+
+       res.json({ msg: "Poll deleted successfully" });
+   } catch (error: any) {
+       console.error("Error while deleting poll:", error);
+       res.status(500).json({ error: "An error occurred while deleting the poll" });
    }
 }

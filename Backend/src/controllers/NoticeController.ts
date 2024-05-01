@@ -7,6 +7,7 @@ export const createNotice = async(req:Request,res:Response)=>{
         
         const Notice:{title:string , issue:string , request:string , action:string,culpritFlatno:string } = req.body;
         const complaintId = req.params.complaintId;
+
         //validation
         
 
@@ -16,10 +17,14 @@ export const createNotice = async(req:Request,res:Response)=>{
             select:{id:true}
          })
 
-        //create Notice
+        
+         //create Notice
          const noticeCreated = await prisma.complaintNotice.create({
             data:{
-                ...Notice,
+                title:Notice.title||"",
+                issue:Notice.issue||"",
+                request:Notice.request||"",
+                action:Notice.action||"",
                 AdminId:req.adminId||"",
                 userId:culprit?.id||"",
                 complaintId
@@ -37,7 +42,7 @@ export const createNotice = async(req:Request,res:Response)=>{
 export const myNotice = async(req:Request,res:Response)=>{
     try {
         //sending notices to culprit
-        const notices = await prisma.complaintNotice.findFirst({
+        const notices = await prisma.complaintNotice.findMany({
             where:{
                 userId:req.userId
             },
@@ -46,6 +51,8 @@ export const myNotice = async(req:Request,res:Response)=>{
                 action:true,
                 issue:true,
                 request:true,
+                understood:true,
+                id:true
             }
         })
 
@@ -76,20 +83,21 @@ export const Culpritunderstood = async(req:Request,res:Response)=>{
             }
         })
 
+        let resolved;
         if(culprit.understood){
             //changing the complaint to resolved:---
-            const resolved = await prisma.complaintRequest.update({
+             resolved = await prisma.complaintRequest.update({
                 where:{id:culprit.complaintId},
                 data:{
                     isResolved:true,
                 }
             })
-            if(resolved){
-                res.json({msg:"complaint has been resolved successfully..."});
-            }
         }
 
-        res.json({msg:"nothing in the database..."});
+        
+        if(resolved){
+            res.json({msg:"complaint has been resolved successfully..."});
+        }
 
     } catch (error:any) {
         res.json({msg:error.message})

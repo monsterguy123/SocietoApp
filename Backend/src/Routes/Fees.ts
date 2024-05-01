@@ -1,9 +1,10 @@
 import {Router} from 'express'
-import { AdminMiddleware,userMiddleware } from '../middlewares/middleware';
-import { CreateFees, SubmitFees } from '../controllers/FeesController';
+import { SecretaryMiddleware,userMiddleware } from '../middlewares/middleware';
+import { CreateFees, SubmitFees, getDonations } from '../controllers/DonationController';
 const FeesRouter = Router();
 
-FeesRouter.post('/createfee',AdminMiddleware,CreateFees)
-FeesRouter.post('/feeSubmitted/:feeId',userMiddleware,SubmitFees)
+FeesRouter.post('/createfee',SecretaryMiddleware,CreateFees)
+FeesRouter.get('/getDonations',userMiddleware,getDonations)
+FeesRouter.post('/donationSubmitted/:donationId',userMiddleware,SubmitFees)
 
 export default FeesRouter;

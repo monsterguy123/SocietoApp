@@ -31,19 +31,34 @@ export const userMiddleware = async (req:Request,res:Response,next:NextFunction)
     }
 }
 
-export const AdminMiddleware = async(req:Request,res:Response,next:NextFunction)=>{
+export const SecretaryMiddleware = async(req:Request,res:Response,next:NextFunction)=>{
     try {
         const token = req.header('Authorization')?.replace('Bearer ','') || "";
 
         const decodedToken = JWT.verify(token, process.env.JWTPRIVATEKEY || "") as JwtPayload
         
+        
         if(decodedToken.role === "secretary"){
             req.adminId = decodedToken.id;
+            req.society = decodedToken.society;
             next();
         }else{
             res.status(401).json({msg:"Admin authorization failed"});
         }
 
+    } catch (error:any) {
+        res.json({msg:error.message})
+    }
+}
+
+export const SuperAdminMiddleware = async(req:Request,res:Response,next:NextFunction)=>{
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ','') || "";
+        const decodedToken = JWT.verify(token, process.env.JWTPRIVATEKEY || "") as JwtPayload
+       
+        if(decodedToken.role === "superAdmin"){
+            next();
+        }
     } catch (error:any) {
         res.json({msg:error.message})
     }

@@ -1,7 +1,53 @@
 "use client"
+
+import {useState} from 'react'
 import Link from "next/link"
+import axios from 'axios'
+import { useRouter } from 'next/navigation';
 
 export default function SignUpComponent() {
+    
+    const router = useRouter();
+
+    const [name,setName] = useState<string>("");
+    const [email,setEmail] = useState<string>("");
+    const [password,setPassword] = useState<string>("");
+    const [society,setSociety] = useState<string>("");
+    const [FlatNo,setFlatNo] = useState<string>("");
+    const [PhoneNo,setPhoneNo] = useState<string>("");
+
+    const SubmitHandling = async (e: any) => {
+        e.preventDefault();
+        
+        try {
+            const url = 'http://localhost:5000/api/v1/memberSignup';
+            const res = await axios.post(url, {
+                name,
+                email,
+                password,
+                society,
+                FlatNo,
+                PhoneNo
+            });
+    
+            if (res.status === 200) {
+                router.push('/signin')
+                setName('');
+                setEmail('');
+                setFlatNo('');
+                setPassword('');
+                setSociety('');
+                setPhoneNo('');
+            } else {
+                throw new Error('Failed to create user');
+            }
+        } catch (error) {
+            console.error('Error creating user:', error);
+            alert('Failed to create user. Please try again.');
+        }
+    };
+    
+
     return (
         <section className="bg-white dark:bg-gray-900">
             <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -30,7 +76,7 @@ export default function SignUpComponent() {
                              Revolutionize your community cohesion with the groove of our Societo app - where neighborly vibes meet digital delights!
                         </p>
 
-                        <form action="#" className="mt-8 grid grid-cols-6 gap-6">
+                        <form onSubmit={SubmitHandling}  className="mt-8 grid grid-cols-6 gap-6">
                             
                             <div className="col-span-6">
                                 <label className="block text-sm font-medium text-gray-700"> User's Name </label>
@@ -39,6 +85,8 @@ export default function SignUpComponent() {
                                     type="text"
                                     id="name"
                                     name="name"
+                                    value={name}
+                                    onChange={(e)=>setName(e.target.value)}
                                     className="mt-1 w-full rounded-md border-black bg-white text-sm text-gray-700 shadow-sm h-8"
                                 />
                             </div> 
@@ -49,6 +97,8 @@ export default function SignUpComponent() {
                                     type="email"
                                     id="Email"
                                     name="email"
+                                    value={email}
+                                    onChange={(e)=>setEmail(e.target.value)}
                                     className="mt-1 w-full rounded-md b bg-white text-sm text-gray-700 shadow-sm h-8"
                                 />
                             </div>
@@ -60,6 +110,8 @@ export default function SignUpComponent() {
                                     type="password"
                                     id="Password"
                                     name="password"
+                                    value={password}
+                                    onChange={(e)=>setPassword(e.target.value)}
                                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm h-8"
                                 />
                             </div>
@@ -70,16 +122,21 @@ export default function SignUpComponent() {
                                     type="text"
                                     id="society"
                                     name="society"
+                                    value={society}
+                                    onChange={(e)=>setSociety(e.target.value)}
                                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm h-8"
                                 />
                             </div>
                             <div className="col-span-3">
-                                <label className="block text-sm font-medium text-gray-700"> Role</label>
-
-                                <select className="mt-1 w-full " name="Role" id="role">
-                                    <option>secretary</option>
-                                    <option>member</option>
-                                </select>
+                                <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+                                <input
+                                    type="text"
+                                    id="PhoneNo"
+                                    name="PhoneNo"
+                                    value={PhoneNo}
+                                    onChange={(e)=>setPhoneNo(e.target.value)}
+                                    className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm h-8"
+                                /> 
                             </div>
                             <div className="col-span-3">
                                 <label className="block text-sm font-medium text-gray-700"> Flat No </label>
@@ -88,6 +145,8 @@ export default function SignUpComponent() {
                                     type="text"
                                     id="FlatNo"
                                     name="FlatNo"
+                                    value={FlatNo}
+                                    onChange={(e)=>setFlatNo(e.target.value)}
                                     className="mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm h-8"
                                 />
                             </div>

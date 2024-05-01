@@ -1,7 +1,9 @@
+import Notices from "@/app/component/memberComponent/Notices";
+
 export default function Notice(){
     return (
         <div>
-            Hello Notice...
+            <Notices/>
         </div>
     )
 }

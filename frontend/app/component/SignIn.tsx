@@ -1,7 +1,34 @@
 "use client"
 import Link from "next/link"
+import { useState } from "react"
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function SignInComponent() {
+
+    const router = useRouter();
+    const [email,setEmail] = useState<string>('');
+    const [password,setPassword] = useState<string>('');
+
+   const SubmitHandler = async(e:any)=>{
+        e.preventDefault();
+        const url = "http://localhost:5000/api/v1/everyoneSignin";
+        const res = await axios.post(url,{
+            email,
+            password
+        })
+        if(res.statusText === "OK"){
+            localStorage.setItem("token",res.data.token);
+            if(res.data.Role === "member"){
+                router.push('/member')
+            }else if(res.data.Role === "secretary"){
+                router.push('/secretary')
+            }
+            setEmail('');
+            setPassword('');
+        }
+   }
+
     return (
         <section className="bg-white">
             <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -19,19 +46,19 @@ export default function SignInComponent() {
                     <div className="max-w-xl lg:max-w-3xl">
                         <a className="block text-blue-600" href="#">
                             <span className="sr-only">Home</span>
-                            <img className="h-20 w-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png"/>
+                            <img className="h-20 w-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png" />
                         </a>
 
                         <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-                            SOCIETO APP 
+                            SOCIETO APP
                         </h1>
 
                         <p className="mt-4 leading-relaxed text-gray-500">
-                        Join the Community, Manage with Ease: Sign in to Societo – Your Society's Digital Hub!
+                            Join the Community, Manage with Ease: Sign in to Societo – Your Society's Digital Hub!
                         </p>
 
-                        <form action="#" className="mt-8 grid grid-cols-6 gap-6">
-                             
+                        <form onSubmit={SubmitHandler} className="mt-8 grid grid-cols-6 gap-6">
+
                             <div className="col-span-6">
                                 <label className="block text-sm font-medium text-gray-700"> Email </label>
 
@@ -39,6 +66,8 @@ export default function SignInComponent() {
                                     type="email"
                                     id="Email"
                                     name="email"
+                                    value={email}
+                                    onChange={(e)=> setEmail(e.target.value)}
                                     className="mt-1 w-full rounded-md border-black bg-white text-sm text-gray-700 shadow-sm h-8"
                                 />
                             </div>
@@ -50,21 +79,23 @@ export default function SignInComponent() {
                                     type="password"
                                     id="Password"
                                     name="password"
+                                    value={password}
+                                    onChange={(e)=> setPassword(e.target.value)}
                                     className="mt-1 w-full rounded-md border-black bg-white text-sm text-gray-700 shadow-sm h-8"
                                 />
                             </div>
 
-                            <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
+                            <div className="items-center col-span-6 sm:flex sm:items-center sm:gap-4">
                                 <button
                                     className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-1 text-lg font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
                                 >
                                     Sign In
                                 </button>
-                           
-                                <div className="mt-4 text-sm flex text-gray-500 sm:mt-0">
-                                    Don't have an account?
+
+                                <div className="flex mt-4 text-sm text-gray-500 sm:mt-0">
+                                    Are you a member and don't have an account?
                                     <Link href={'/signup'}>
-                                    <p className="text-gray-700 underline ml-1">Sign Up</p>.
+                                        <p className="text-gray-700 underline ml-1">Sign Up</p>.
                                     </Link>
                                 </div>
                             </div>

@@ -10,6 +10,7 @@ datasource db {
 enum Role{
   member
   secretary
+  superAdmin
 }
 
 model User{
@@ -19,17 +20,17 @@ model User{
     img String? 
     email String @unique 
     password String 
-    society String
-    FlatNo String
-    role  Role
-    Poll Poll[]
-    vote  Voted[]
-    complaintRequest ComplaintRequest[]
+    society String 
+    FlatNo String? 
+    PhoneNo String 
+    role  Role 
+    Poll Poll[] 
+    submitPoll Poll[] @relation("user voted")
+    complaintRequest ComplaintRequest[] 
     NoticeCreation ComplaintNotice[] @relation("Admin")
     ComplaintNotice ComplaintNotice[] @relation("Culprit")
-    FeesId String? 
     FeesCreated Fees[] @relation("Admin")
-    Fees_Submited userSubmitted[] @relation("Submitter")
+    Fees_Submited Fees[] @relation("Submitter")
 
     createAt DateTime @default(now())
     updateAt DateTime @updatedAt
@@ -44,6 +45,7 @@ model Poll{
     society String
     AdminId String
     User User @relation(fields: [AdminId],references: [id])
+    userVoted User[] @relation("user voted")
 
     createAt DateTime @default(now())
     updateAt DateTime @updatedAt
@@ -56,7 +58,6 @@ model Voted{
   vote Int @default(0)
   PollId String 
   poll Poll @relation(fields: [PollId], references: [id])
-  user User[]
 
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
@@ -66,28 +67,19 @@ model Fees{
    id String @id @default(cuid())
 
    title String
-   amount Int
-   startDate DateTime
-   endDate DateTime
+   Donations Int @default(0)
+   Society String
+   startDate String
+   endDate String
    AdminId String
    Admin User @relation("Admin",fields:[AdminId],references: [id]) 
-   user userSubmitted[]
+   user_Submitter User[] @relation("Submitter")
+
 
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt
 }
 
-model userSubmitted{
-   id String @id @default(cuid())
-
-   FeeId String
-   Fee Fees @relation(fields:[FeeId],references:[id])
-   user_Submitter User[] @relation("Submitter")
-
-
-   createAt DateTime @default(now())
-   updateAt DateTime @updatedAt
-}
 
 model ComplaintRequest {
    id String @id @default(cuid()) 
