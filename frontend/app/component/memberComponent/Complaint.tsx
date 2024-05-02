@@ -32,8 +32,8 @@ export default function Complaint() {
                 }
             });
     
-            if (res.status === 200) {
-                console.log(res)
+            if (res.statusText === "OK") {
+                alert(res.data.msg)
                 setTitle("");
                 setDescription("");
                 setEvidenceImg("");

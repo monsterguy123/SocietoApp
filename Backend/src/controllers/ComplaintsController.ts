@@ -33,11 +33,11 @@ export const CreateComplaint = async(req:Request,res:Response)=>{
         });
 
         if(CreateComplaint){
-            res.json({msg:"Complaint has been logged..."});
+           return res.json({msg:"Complaint has been logged..."});
         }
 
     } catch (error:any) {
-        res.json({msg:error.message});
+        return res.json({msg:error.message});
     }
 }
 
@@ -50,9 +50,9 @@ export const myCompaint = async(req:Request,res:Response)=>{
             where:{id:req.userId}
         })
 
-        res.json({myComplaint});
+        return res.json({myComplaint});
     } catch (error:any) {
-        res.json({msg:error.message});
+        return res.json({msg:error.message});
     }
 }
 
@@ -70,10 +70,10 @@ export const getAllComplaint = async(req:any,res:Response)=>{
          })
 
           if(complaints){
-            res.json({complaints})
+            return res.json({complaints})
           }
 
     } catch (error:any) {
-        res.json({msg:error.message});
+        return res.json({msg:error.message});
     }
 }

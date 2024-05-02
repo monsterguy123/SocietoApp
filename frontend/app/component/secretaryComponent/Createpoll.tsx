@@ -16,7 +16,7 @@ const CreatePoll: React.FC = () => {
     const [options, setOptions] = useState<string[]>(['']);
     const [poll, setPoll] = useState<Poll[]>([]);
     const [totalPeople, setTotalPeople] = useState<number>(0);
-
+    const [refresh,setRefresh] = useState<boolean>(false);
 
     const handleAddOption = () => {
         setOptions([...options, '']);
@@ -38,42 +38,7 @@ const CreatePoll: React.FC = () => {
         setQuestion(event.target.value);
     };
 
-    const handleSubmit = async () => {
-        const token = localStorage.getItem('token');
-        const url = "http://localhost:5000/api/v1/poll/CreatePoll";
-        const res = await axios.post(url, {
-            title: question,
-            options: options
-        }, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-        if (res.statusText === "OK") {
-            alert(res.data.msg)
-            setOptions(['']);
-            setQuestion('');
-        }
-    };
-
-    const submitHandler = async (id: string) => {
-        const url = `http://localhost:5000/api/v1/poll/deletePoll/${id}`;
-        const token = localStorage.getItem('token');
-        try {
-            const res = await axios.delete(url, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            if (res.statusText === "OK") {
-                alert(res.data.msg)
-            }
-        } catch (error) {
-            console.error(error);
-            alert("An error occurred while deleting the poll.");
-        }
-    }
-
+// fetching the polls data...
     useEffect(() => {
         const fetchData = async () => {
             const url = 'http://localhost:5000/api/v1/poll/getPolls';
@@ -93,7 +58,45 @@ const CreatePoll: React.FC = () => {
             }
         };
         fetchData();
-    }, []);
+    }, [refresh]);
+
+    const handleSubmit = async () => {
+        const token = localStorage.getItem('token');
+        const url = "http://localhost:5000/api/v1/poll/CreatePoll";
+        const res = await axios.post(url, {
+            title: question,
+            options: options
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        if (res.statusText === "OK") {
+            alert(res.data.msg)
+            setRefresh(true);
+            setOptions(['']);
+            setQuestion('');
+        }
+    };
+
+    const submitHandler = async (id: string) => {
+        const url = `http://localhost:5000/api/v1/poll/deletePoll/${id}`;
+        const token = localStorage.getItem('token');
+        try {
+            const res = await axios.delete(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            if (res.statusText === "OK") {
+                alert(res.data.msg)
+                setRefresh(false)
+            }
+        } catch (error) {
+            console.error(error);
+            alert("An error occurred while deleting the poll.");
+        }
+    }
 
     const calculatePercentage = (votes: number) => {
         return `${(votes / totalPeople) * 100}%`;

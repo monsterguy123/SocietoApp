@@ -56,20 +56,18 @@ export const getDonations = async(req:Request,res:Response)=>{
          })
 
          if(Doantions){
-            res.json({Doantions})
+            return res.json({Doantions})
          }
 
     } catch (error:any) {
-        res.json({msg:error.message})
+        return  res.json({msg:error.message})
     }
 }
 
 export const SubmitFees = async(req:Request,res:Response)=>{
     try {
-       
         const Donation:{dona:number}= req.body;
         const id = req.params.donationId;
-
 
         //Already Submitted:--
         const Already = await prisma.fees.findUnique({
@@ -83,9 +81,9 @@ export const SubmitFees = async(req:Request,res:Response)=>{
                 }
             }
         })
-
-        if(Already?.user_Submitter[0].id === req.userId){
-            res.json({msg:"already donated no need to donate more One donation per flat..."});
+        
+        if(Already?.user_Submitter.length !== 0){
+           return   res.json({msg:"already donated no need to donate more One donation per flat..."});
         }
 
         //submit donations:--
@@ -105,15 +103,13 @@ export const SubmitFees = async(req:Request,res:Response)=>{
                     select:{
                         id:true
                     }
-
-
                 })})
 
             if(Donate){
-                res.json({msg:"Donated Successfully..."})
+                return res.json({msg:"Donated Successfully..."})
             }
             
     } catch (error:any) {
-        res.json({msg:error.message})
+        return res.json({msg:error.message})
       }
     }

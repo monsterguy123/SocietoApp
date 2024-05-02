@@ -4,18 +4,15 @@ import { useState } from "react"
 
 export default function Donation() {
     const [title, setTitle] = useState<string>('');
-    const [amount, setAmount] = useState<number>(0)
     const [startDate, setStartDate] = useState<string>("");
     const [endDate, setEndDate] = useState<string>("")
 
     const submitHandler = async (e: any) => {
         e.preventDefault();
-        console.log(startDate, endDate)
         const token = localStorage.getItem('token');
         const url = "http://localhost:5000/api/v1/fee/createfee";
         const res = await axios.post(url, {
             title,
-            amount,
             startDate,
             endDate
         }, {
@@ -25,7 +22,6 @@ export default function Donation() {
         });
         if(res.statusText === "OK"){
             alert("donation created successfully...")
-            setAmount(0)
             setEndDate("")
             setStartDate("")
             setTitle("")
@@ -42,14 +38,6 @@ export default function Donation() {
                                 title
                             </label>
                             <input onChange={(e) => setTitle(e.target.value)} value={title} className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3" id="grid-first-name" type="text" placeholder="Title..." />
-                        </div>
-                    </div>
-                    <div className="-mx-3 md:flex mb-6">
-                        <div className="md:w-full px-3">
-                            <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                                Amount
-                            </label>
-                            <input onChange={(e) => setAmount(parseInt(e.target.value))} value={amount} className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" type="number" placeholder="Amount..." />   
                         </div>
                     </div>
                     <div className="-mx-3 md:flex mb-6">

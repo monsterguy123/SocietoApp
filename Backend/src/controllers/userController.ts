@@ -133,11 +133,11 @@ export const SecretaryApplication = async (req:Request,res:Response)=>{
 
         //response
         if(info){
-            res.json({msg:"Aplplication is created Successfully..."});
+            return res.json({msg:"Aplplication is created Successfully..."});
         }
 
     } catch (error:any) {
-        res.json({msg:error.message})
+        return res.json({msg:error.message})
     }
 }
 
@@ -203,11 +203,11 @@ export const CreatingSecretary = async(req:Request,res:Response)=>{
 
 
           if(info && secreSociety){
-            res.json({msg:"created user and send email and password to the secretart of the specified society"});
+            return res.json({msg:"created user and send email and password to the secretart of the specified society"});
           }
 
     } catch (error:any) {
-         res.json({msg:error.message});
+         return res.json({msg:error.message});
     }
 }
 
@@ -221,10 +221,10 @@ export const getAllSecretary = async(req:Request,res:Response)=>{
         })
 
         if(Secretary){
-            res.json({Secretary})
+            return res.json({Secretary})
         }
     } catch (error:any) {
-        res.json({msg:error.message});
+        return res.json({msg:error.message});
     }
 }
 
@@ -245,9 +245,9 @@ export const SocietyMembers = async(req:Request,res:Response)=>{
         })
         
         if(members){
-            res.json({members})
+            return res.json({members})
         }
     } catch (error:any) {
-        res.json({msg:error.message})
+        return res.json({msg:error.message})
     }
 }

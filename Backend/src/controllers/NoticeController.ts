@@ -32,10 +32,10 @@ export const createNotice = async(req:Request,res:Response)=>{
          })
 
           if(noticeCreated){
-            res.json({msg:"notice has been created..."});
+            return res.json({msg:"notice has been created..."});
           }        
       } catch (error:any) {
-          res.json({msg:error.message})
+          return res.json({msg:error.message})
       }
 }
 
@@ -57,11 +57,11 @@ export const myNotice = async(req:Request,res:Response)=>{
         })
 
         if(notices){
-            res.json({notices})
+            return res.json({notices})
         }
 
     } catch (error:any) {
-        res.json({msg:error.message});
+        return res.json({msg:error.message});
     }
 }
 
@@ -96,10 +96,10 @@ export const Culpritunderstood = async(req:Request,res:Response)=>{
 
         
         if(resolved){
-            res.json({msg:"complaint has been resolved successfully..."});
+            return res.json({msg:"complaint has been resolved successfully..."});
         }
 
     } catch (error:any) {
-        res.json({msg:error.message})
+        return res.json({msg:error.message})
     }
 }

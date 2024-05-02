@@ -75,10 +75,10 @@ export const GetAPoll = async(req:Request,res:Response)=>{
 
       
         if(Poll){
-          res.json({Poll})
+          return res.json({Poll})
         }
      }catch(error:any) {
-        res.json({msg:error.message})
+        return res.json({msg:error.message})
      }
 }
 
@@ -134,12 +134,12 @@ export const submitPoll = async(req:Request,res:Response)=>{
        })
 
        if(result && user){
-         res.json({
+         return res.json({
             msg:"voted successfully"
          })
        }
    } catch (error:any) {
-       res.json({msg:error.message})
+       return res.json({msg:error.message})
    }
 }
 
@@ -170,11 +170,11 @@ export const GetPolls = async(req:Request,res:Response)=>{
       let Total:number = TotalNoOfPeople.length;
 
       if(polls){
-         res.json({polls,Total});
+         return res.json({polls,Total});
       }
 
    } catch (error:any) {
-      res.json({msg:error.message})
+      return res.json({msg:error.message})
    }
 }
 
@@ -198,7 +198,7 @@ export const RemovePoll = async (req: Request, res: Response) => {
          where:{id:pollId}
        })
 
-       res.json({ msg: "Poll deleted successfully" });
+       return res.json({ msg: "Poll deleted successfully" });
    } catch (error: any) {
        console.error("Error while deleting poll:", error);
        res.status(500).json({ error: "An error occurred while deleting the poll" });
