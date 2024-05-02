@@ -36,6 +36,8 @@ export default function SignInComponent() {
                 <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
                     <Image
                         alt="#"
+                        width={500}
+                        height={500}
                         src="https://soci101.org/_images/REALWORLD7_FIG03_CO.jpg"
                         className="absolute inset-0 h-full w-full object-cover"
                     />
@@ -47,7 +49,7 @@ export default function SignInComponent() {
                     <div className="max-w-xl lg:max-w-3xl">
                         <a className="block text-blue-600" href="#">
                             <span className="sr-only">Home</span>
-                            <Image alt="#" className="h-20 w-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png" />
+                            <Image alt="#" width={70} height={70} src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png" />
                         </a>
 
                         <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
