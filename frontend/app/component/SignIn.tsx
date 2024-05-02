@@ -1,5 +1,6 @@
 "use client"
 import Link from "next/link"
+import Image from "next/image";
 import { useState } from "react"
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -33,8 +34,8 @@ export default function SignInComponent() {
         <section className="bg-white">
             <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
                 <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
-                    <img
-                        alt=""
+                    <Image
+                        alt="#"
                         src="https://soci101.org/_images/REALWORLD7_FIG03_CO.jpg"
                         className="absolute inset-0 h-full w-full object-cover"
                     />
@@ -46,7 +47,7 @@ export default function SignInComponent() {
                     <div className="max-w-xl lg:max-w-3xl">
                         <a className="block text-blue-600" href="#">
                             <span className="sr-only">Home</span>
-                            <img className="h-20 w-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png" />
+                            <Image alt="#" className="h-20 w-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png" />
                         </a>
 
                         <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
@@ -54,7 +55,7 @@ export default function SignInComponent() {
                         </h1>
 
                         <p className="mt-4 leading-relaxed text-gray-500">
-                            Join the Community, Manage with Ease: Sign in to Societo – Your Society's Digital Hub!
+                            Join the Community, Manage with Ease: Sign in to Societo – Your Society&apos;s Digital Hub!
                         </p>
 
                         <form onSubmit={SubmitHandler} className="mt-8 grid grid-cols-6 gap-6">
@@ -93,7 +94,7 @@ export default function SignInComponent() {
                                 </button>
 
                                 <div className="flex mt-4 text-sm text-gray-500 sm:mt-0">
-                                    Are you a member and don't have an account?
+                                    Are you a member and don&apos;t have an account?
                                     <Link href={'/signup'}>
                                         <p className="text-gray-700 underline ml-1">Sign Up</p>.
                                     </Link>

@@ -2,6 +2,7 @@
 import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
+import Image from "next/image";
 
 const ContactForm = () => {
   
@@ -58,7 +59,7 @@ export default function Home() {
       <section className="bg-white">
         <div className="grid max-w-screen-xl px-4 pt-20 pb-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 lg:pt-28">
           <div className="mr-auto place-self-center lg:col-span-7">
-            <img className="w-20 h-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png"/>
+            <Image alt="#" className="w-20 h-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png"/>
             <h1 className="max-w-2xl mb-4 text-4xl font-serif leading-none tracking-tight md:text-5xl xl:text-6xl dark:text-white">
               THE SOCIETO APP
             </h1>
@@ -75,7 +76,7 @@ export default function Home() {
             </div>
           </div>
           <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-            <img src="https://houstonagentmagazine.com/wp-content/uploads/sites/7/2021/02/Race_Homeownership_Illustration-scaled.jpg" alt="hero image" />
+            <Image alt="#" src="https://houstonagentmagazine.com/wp-content/uploads/sites/7/2021/02/Race_Homeownership_Illustration-scaled.jpg"  />
           </div>
         </div>
       </section>

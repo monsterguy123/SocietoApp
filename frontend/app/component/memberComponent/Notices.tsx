@@ -1,7 +1,6 @@
 "use client"
 import axios from 'axios'
-import { headers } from 'next/headers'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 type Result = {
     title: string,
@@ -16,7 +15,7 @@ type Result = {
 export default function Notices() {
     const [result, setResult] = useState<Result[]>([]);
 
-    const SubmitHandler = async (id: string) => {
+    const SubmitHandler = useCallback(async (id: string) => {
         const token = localStorage.getItem('token');
         const url = `http://localhost:5000/api/v1/notice/understood/${id}`;
         try {
@@ -32,7 +31,7 @@ export default function Notices() {
         } catch (error) {
             console.error("Error:", error);
         }
-    };
+    }, []);
 
     useEffect((): any => {
         return async () => {

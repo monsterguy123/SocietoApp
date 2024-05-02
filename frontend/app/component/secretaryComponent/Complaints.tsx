@@ -38,7 +38,7 @@ export default function Complaints() {
             {
                 result.map((item, key) => {
                     return (
-                        <div className='bg-white w-[70%] shadow-md shadow-gray-400 rounded px-8 pt-6 pb-8 mt-10 ml-32 items-center flex flex-col my-2 "'>
+                        <div key={key} className='bg-white w-[70%] shadow-md shadow-gray-400 rounded px-8 pt-6 pb-8 mt-10 ml-32 items-center flex flex-col my-2 "'>
                             <p className='text-xl underline font-serif'>{item.title}</p>
                             <p className='text-lg font-serif text-center'>Description : {item.description}</p>
                             <p className='text-lg font-serif'>Impact : {item.impact}</p>

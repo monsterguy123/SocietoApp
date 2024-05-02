@@ -1,5 +1,5 @@
 "use client"
-
+import Image from 'next/image'
 import {useState} from 'react'
 import Link from "next/link"
 import axios from 'axios'
@@ -52,8 +52,8 @@ export default function SignUpComponent() {
         <section className="bg-white dark:bg-gray-900">
             <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
                 <aside className="relative block h-16 lg:order-last lg:col-span-5 lg:h-full xl:col-span-6">
-                    <img
-                        alt=""
+                    <Image
+                        alt="#"
                         src="https://soci101.org/_images/REALWORLD7_FIG03_CO.jpg"
                         className="absolute inset-0 h-full w-full object-cover"
                     />
@@ -65,7 +65,7 @@ export default function SignUpComponent() {
                     <div className="max-w-xl lg:max-w-3xl">
                         <a className="block text-blue-600" href="#">
                             <span className="sr-only">Home</span>
-                            <img className="h-20 w-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png"/>
+                            <Image alt='#' className="h-20 w-20" src="https://appsnstuff.com/img/portfolio_images/devices/socity-management/socity-management-logo.png"/>
                         </a>
 
                         <h1 className="mt-6 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
@@ -79,7 +79,7 @@ export default function SignUpComponent() {
                         <form onSubmit={SubmitHandling}  className="mt-8 grid grid-cols-6 gap-6">
                             
                             <div className="col-span-6">
-                                <label className="block text-sm font-medium text-gray-700"> User's Name </label>
+                                <label className="block text-sm font-medium text-gray-700"> User&apos;s Name </label>
 
                                 <input
                                     type="text"

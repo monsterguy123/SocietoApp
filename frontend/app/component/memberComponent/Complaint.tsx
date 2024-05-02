@@ -87,7 +87,7 @@ export default function Complaint() {
                 <div className="-mx-3 md:flex mb-6">
                     <div className="md:w-full px-3">
                         <label className="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2">
-                            Culpirt's Room no
+                            Culpirt&apos;s Room no
                         </label>
                         <input onChange={(e)=>setculpritFlatno(e.target.value)} value={culpritFlatno} className="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3" type="text" placeholder="Room no..." />
                     </div>
