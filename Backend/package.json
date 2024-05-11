@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc --b && nodemon ./dist/index"
+    "build": "npx tsc -b && nodemon ./dist/index"
   },
   "keywords": [],
   "author": "",
