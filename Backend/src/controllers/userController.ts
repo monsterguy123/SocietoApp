@@ -1,6 +1,6 @@
-import {Request,Response, application} from 'express'
-import {userSchema,UserSchema,userSigninSchema,UserSigninSchema} from '../RoutesValidations/userValidation'
-import { PrismaClient, Role } from '@prisma/client';
+import {Request,Response, } from 'express'
+import {userSchema,UserSchema,userSigninSchema} from '../RoutesValidations/userValidation'
+import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 const nodemailer = require('nodemailer')
