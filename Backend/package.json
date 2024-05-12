@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx prisma generate && npx tsc -b && node ./dist/index"
+    "build": "npx prisma generate --skip-auto-generate && npx tsc -b && node ./dist/index"
   },
   "keywords": [],
   "author": "",
