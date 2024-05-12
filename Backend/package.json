@@ -1,10 +1,10 @@
 {
-  "name": "coursesapp",
+  "name": "societoapp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc -b && nodemon ./dist/index"
+    "start": "npx tsc -b && nodemon ./dist/index"
   },
   "keywords": [],
   "author": "",
