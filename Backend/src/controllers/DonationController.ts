@@ -83,7 +83,7 @@ export const SubmitFees = async (req: Request, res: Response) => {
         }
 
         // Submit Donations
-        const Donate = await prisma.$transaction(async (prisma) => {
+        const Donate = await prisma.$transaction(async (prisma:any) => {
             return await prisma.fees.update({
                 where: { id },
                 data: {
