@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc -b && node ./dist/index"
+    "build": "npx tsc -b && npx prisma migrate dev --name intischema && npx prisma generate && node ./dist/index"
   },
   "keywords": [],
   "author": "",
