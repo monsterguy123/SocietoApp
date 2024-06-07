@@ -18,13 +18,10 @@ Societo is a comprehensive society management application built with Node.js, Ne
 
 ## Screenshots
 
-### Landing Page
 ![Landing Page](https://github.com/monsterguy123/SocietoApp/assets/112856952/cecbadf2-9c4b-49ec-ae87-af912990f1ae)
 
-### Sign-in Page
 ![Sign-in Page](https://github.com/monsterguy123/SocietoApp/assets/112856952/424f1562-1c85-4957-bbc3-3af4af3e1143)
 
-### Sign-up Form (Members)
 ![Sign-up Form (Members)](https://github.com/monsterguy123/SocietoApp/assets/112856952/b9fcbd9b-b1a7-4518-930c-e1a97e038e99)
 
 ### Member UI Screenshots
@@ -68,3 +65,32 @@ Societo is a comprehensive society management application built with Node.js, Ne
 
 - **Secretary Management**
 ![Secretary Management](https://github.com/monsterguy123/SocietoApp/assets/112856952/2e558491-fdcd-470a-9605-e9c9252837bc)
+
+## Installation
+
+Before proceeding, ensure you have Node.js installed. You can use NEONDB for PostgreSQL, a free platform.
+
+### Frontend
+
+1. Clone the repository:
+git clone https://github.com/monsterguy123/SocietoApp.git
+cd SocietoApp/frontend
+2. Install dependencies:
+   npm install
+4. Run the development server:
+   npm run dev
+
+
+### Backend
+
+1. Navigate to the backend directory:
+   cd Societo/backend
+3. Install dependencies:
+    npm install
+4. Initialize TypeScript configuration:
+    npx tsc --init
+5. Build the TypeScript code:
+   npm run build
+---
+
+Feel free to further customize and embellish this template with more details about your project, its architecture, how to contribute, or any other pertinent information.
